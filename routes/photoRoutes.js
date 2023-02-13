@@ -10,6 +10,7 @@ router.route('/').get(async (req, res) => {
       `${baseUrl}/photos/?client_id=${apiKey}`
     );
     const data = await callPhotos.data;
+    console.log(data);
     const rawPhotosURL = data.map((photo) => photo.urls.raw);
     console.log('rawPhotosURL', rawPhotosURL);
     res.status(200).json({ rawPhotosURL });
@@ -18,22 +19,34 @@ router.route('/').get(async (req, res) => {
     res.status(500).json({ message: 'Server error. Please try again later.' });
   }
 });
-// username: 'weriaroslav'
+
+// example ->   "id": "2qoJ4RMvnYA",
+router.route('/:id').get(async (req, res) => {
+  try {
+    const { id } = req.params;
+    const callPhoto = await axios.get(
+      `${baseUrl}/photos/${id}/?client_id=${apiKey}`
+    );
+    const data = await callPhoto.data;
+    const rawPhotoURL = data.urls.raw;
+    res.status(200).json(rawPhotoURL);
+  } catch (error) {
+    // console.log(error);
+    res.status(500).json({ message: 'Server error. Please try again later.' });
+  }
+});
+
+//for example-> username: 'weriaroslav'
 router.route('/user/:username').get(async (req, res) => {
   try {
     const { username } = req.params;
     const callUserPhotos = await axios.get(
       `${baseUrl}/users/${username}/photos/?client_id=${apiKey}`
     );
-    // console.log('/////////////', callUserPhotos);
+
     const userPhotosData = callUserPhotos.data;
-    // console.log('/////////////', userPhotosData);
-    const newArr = [];
+
     const userPhotos = userPhotosData.map((photo) => {
-      // if (photo.description === null) {
-      //   photo.description = '"No description provided.'
-      // }
-      //  newArr.push(photo.id, photo.urls.raw, description )
       return {
         id: photo.id,
         username,
@@ -44,12 +57,13 @@ router.route('/user/:username').get(async (req, res) => {
             : photo.description,
       };
     });
+    console.log('✔');
 
-    res.json({ username, userPhotos });
+    res.status(200).json({ username, userPhotos });
   } catch (error) {
     // could there be more than one error? leaving it as an array an not error.response.data[0]
-    console.log('!!!!!!!!!!!!!!!!!!', error.response.data);
-    res.status(500).json({
+    console.log('!!!!!!!!!!!!!!!!!!');
+    res.status('error').json({
       message: error.response.data,
     });
   }
