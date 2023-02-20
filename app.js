@@ -3,6 +3,7 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 const router = express.Router();
 const connectDB = require('./config/db');
+const { errorHandler } = require('./middleware/errorMiddleware');
 require('dotenv').config();
 connectDB();
 app.use(express.json());
@@ -14,6 +15,7 @@ app.get('/', async (req, res) => {
 app.use('/api/photos', require('./routes/photoRoutes'));
 app.use('/api/users', require('./routes/userRoutes'));
 app.use('/api/favorites', require('./routes/favoritesRoutes'));
+app.use(errorHandler);
 
 app.listen(PORT, () => {
   console.log('🚀 on port ' + PORT);
