@@ -13,6 +13,7 @@ app.get('/', async (req, res) => {
 });
 app.use('/api/photos', require('./routes/photoRoutes'));
 app.use('/api/users', require('./routes/userRoutes'));
+app.use('/api/favorites', require('./routes/favoritesRoutes'));
 
 app.listen(PORT, () => {
   console.log('🚀 on port ' + PORT);
