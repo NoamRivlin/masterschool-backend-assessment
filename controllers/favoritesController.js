@@ -14,6 +14,7 @@ const getFavoritePhotos = asyncHandler(async (req, res) => {
 
   res.status(200).json(favorites);
 });
+
 const addFavoritePhoto = asyncHandler(async (req, res) => {
   console.log('Add favorite');
   const { url, description, username, explanation } = req.body;
@@ -49,7 +50,7 @@ const editFavoritePhoto = asyncHandler(async (req, res) => {
   await favorite.save();
   res.status(201).json(favorite);
 
-  // another way of doind it but validatoins wouldn't work
+  // another way of doind it but validations wouldn't work
   // const editedFavorite = await FavoritePhoto.findByIdAndUpdate(
   //   req.params.id,
   //   { explanation: req.body.explanation },
